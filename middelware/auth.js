@@ -3,7 +3,7 @@
 //importation
 const jwt = require('jsonwebtoken'); //package pour créer et vérifier les tokens d'authentification
 
-//exporte le middelware (aapliqué avant les controllers des routes)
+//exporte le middelware (appliqué avant les controllers des routes)
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; //récupérartion du token

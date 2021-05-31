@@ -6,17 +6,18 @@ const express = require('express');
 //création d'un routeur Express
 const router = express.Router();
 
-//importe le middelware de protection de route
-const auth = require('../middelware/auth');
+//importations
+const auth = require('../middelware/auth'); //importe le middelware de protection de route
+const multer = require('../middelware/multer-config'); //middelware de gestion de fichier
 
 //importe la logique métier de sauce
 const sauceCtrl = require('../controllers/sauce');
 
 //routes disponibles dans l'application avec leur nom de fonction (avec une sémantique qui permet de savoir ce qu'elles font)
 router.get('/', auth, sauceCtrl.getAllSauces);
-router.post('/', auth, sauceCtrl.createSauce);
+router.post('/', auth, multer, sauceCtrl.createSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
-router.put('/:id', auth, sauceCtrl.modifySauce);
+router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
 
 
