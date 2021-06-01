@@ -3,7 +3,7 @@
 //importe Express
 const express = require('express');
 
-//création d'un routeur Express
+//créé un routeur Express
 const router = express.Router();
 
 //importations
@@ -19,6 +19,7 @@ router.post('/', auth, multer, sauceCtrl.createSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
+router.post('/:id/like', auth, sauceCtrl.likeSauce);
 
 
 //exporte le routeur Express
