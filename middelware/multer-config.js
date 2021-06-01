@@ -1,6 +1,6 @@
 ////////// gestion des fichiers envoyés vers l'API //////////
 
-//importation de multer
+//importe package multer
 const multer = require('multer');
 
 //dictionnaire pour créer l'extension du fichier à partir du MIMETYPE

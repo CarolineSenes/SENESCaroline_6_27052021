@@ -1,18 +1,26 @@
 ////////// contient de l'application //////////
 
 //importations
-const express = require('express');
-const mongoose = require('mongoose');
+require('dotenv').config(); //charge les variables d'environnement
+const express = require('express'); //framework node.js
+const mongoose = require('mongoose'); //fracilite interactions avec DB MongoDB
 const path = require('path'); //donne accès au chemin de notre système de fichier
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-require('dotenv').config();
+const rateLimit = require('express-rate-limit'); //limite les requêtes par IP
+const helmet = require('helmet'); //définit divers en-têtes HTTP sécurisées
 
-const userRoutes = require('./routes/user'); //importation du routeur user
-const sauceRoutes = require('./routes/sauce'); //importation du routeur sauce
+//100 requêtes toutes les 15min par IP
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100
+});
 
 //création de notre application express
 const app = express();
+
+//limiteur de requêtes s'applique seulement aux requêtes commençant par API (=ne concerne pas les express.static)
+app.use('/api', apiLimiter); 
+
+app.use(helmet());
 
 //connexion à bdd MongoDB via mongoose
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vtyck.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -29,26 +37,19 @@ app.use((req, res, next) => {
   next();
 });
 
-//Limite à 100, le nombre de requêtes par IP
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100
-});
-
-//définit divers en-têtes HTTP sécurisées
-app.use(helmet());
-
-//limiteur de requêtes s'applique seuelement aux requêtes commençant par API (=ne concerne pas les express.static)
-app.use('/api', apiLimiter); 
-
 //rend le corps des requêtes json (de tt types) => en objet JS utilisable -- anciennement body-parser
 app.use(express.json());
 
-//enregistre les routeurs dans l'application
+//gestion des fichiers images
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//importe les routes
+const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
+
+//enregistre les routeurs dans l'application
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
-
 
 //exporte l'application
 module.exports = app;

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'); //package pour créer et vérifier les toke
 //exporte le middelware (appliqué avant les controllers des routes)
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1]; //récupérartion du token
+    const token = req.headers.authorization.split(' ')[1]; //récupérartion du token après séparation du bearer
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET'); // décode le token (génère un objet JS)
     const userId = decodedToken.userId; //extrait le userId de l'objetJS généré juste avant
     if (req.body.userId && req.body.userId !== userId) {
