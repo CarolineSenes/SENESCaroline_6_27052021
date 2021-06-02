@@ -7,7 +7,7 @@ const mongoose = require('mongoose'); //fracilite interactions avec DB MongoDB
 const path = require('path'); //donne accès au chemin de notre système de fichier
 const rateLimit = require('express-rate-limit'); //limite les requêtes par IP
 const helmet = require('helmet'); //définit divers en-têtes HTTP sécurisées
-const xssClean = require('xss-clean'); //transforme les entrées utilisateur pour éviter attaque XSS
+const mongoSanitize = require('express-mongo-sanitize'); //protège des attaques par injection NoSQL(MongoDB)
 
 //100 requêtes toutes les 15min par IP
 const apiLimiter = rateLimit({
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 //rend le corps des requêtes json (de tt types) => en objet JS utilisable -- anciennement body-parser
 app.use(express.json());
 
-app.use(xssClean());
+app.use(mongoSanitize());
 
 //gestion des fichiers images
 app.use('/images', express.static(path.join(__dirname, 'images')));
