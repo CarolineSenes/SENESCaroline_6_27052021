@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken'); //package pour créer et vérifier les toke
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; //récupérartion du token après séparation du bearer
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET'); // décode le token (génère un objet JS)
+    const decodedToken = jwt.verify(token, `${process.env.TOKEN}`); // décode le token (génère un objet JS)
     const userId = decodedToken.userId; //extrait le userId de l'objetJS généré juste avant
     if (req.body.userId && req.body.userId !== userId) {
       throw 'User ID non valable !';

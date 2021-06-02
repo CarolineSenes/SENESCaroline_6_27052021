@@ -41,7 +41,7 @@ exports.login = (req, res, next) => {
             userId: user._id, //renvoie _ID généré par MongoDB,
             token: jwt.sign( //et TOKEN d'authentification
               { userId: user._id }, //données à encoder (=payload)
-              'RANDOM_TOKEN_SECRET', //clé secrète pour l'encodage
+              `${process.env.TOKEN}`, //clé secrète pour l'encodage
               { expiresIn: '24h' } //durée de validité du TOKEN
             )
           });
