@@ -4,7 +4,6 @@
 const bcrypt = require('bcrypt'); //package de chiffrement bcrypt
 const jwt = require('jsonwebtoken'); //package pour créer et vérifier les tokens d'authentification
 const User = require('../models/User'); //schéma de User
-const MaskData = require('maskdata'); //package pour masquer l'email (utilisation du masquage par défaut)
 
 
 ///// exports des fonctions /////
@@ -14,7 +13,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10) // hash avec bcrypt avec une boucle de 10
     .then(hash => {
       const user = new User({
-        email: MaskData.maskEmail2(req.body.email), //masque l'email
+        email: req.body.email, //masque l'email
         password: hash //assigne le hash obtenu à password
       });
       user.save() //sauvegarde dans MongoDB
@@ -27,7 +26,7 @@ exports.signup = (req, res, next) => {
 
 // connexion utilisateur
 exports.login = (req, res, next) => {
-  User.findOne({ email: MaskData.maskEmail2(req.body.email) }) //compare l'email masqué avec req.body.email
+  User.findOne({ email: req.body.email }) //compare l'email masqué avec req.body.email
     .then(user => { //recherche l'utilisateur correspondant
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
