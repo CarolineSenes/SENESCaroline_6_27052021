@@ -3,7 +3,7 @@
 //importations
 require('dotenv').config(); //charge les variables d'environnement
 const express = require('express'); //framework node.js
-const mongoose = require('mongoose'); //fracilite interactions avec DB MongoDB
+const mongoose = require('mongoose'); //facilite interactions avec DB MongoDB
 const path = require('path'); //donne accès au chemin de notre système de fichier
 const rateLimit = require('express-rate-limit'); //limite les requêtes par IP
 const helmet = require('helmet'); //définit divers en-têtes HTTP sécurisées

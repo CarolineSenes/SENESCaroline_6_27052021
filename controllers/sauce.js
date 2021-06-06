@@ -38,7 +38,7 @@ exports.deleteSauce = (req, res, next) => {
     .then(sauce => {
       const filename = sauce.imageUrl.split('/images/')[1]; //extrait le nom du fichier à supprimer
       fs.unlink(`images/${filename}`, () => { //supprime un fichier
-        Sauce.deleteOne({ _id: req.params.id }) //réalise la suppression de la sauce dans la bdd
+        Sauce.deleteOne({ _id: req.params.id }) //Supprime de la sauce dans la bdd
           .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
           .catch(error => res.status(400).json({ error }));
       });
@@ -48,7 +48,7 @@ exports.deleteSauce = (req, res, next) => {
 
 // récupère une sauce spécifique
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.id }) //cherche le même id
         .then(sauce => res.status(200).json(sauce))
         .catch(error => res.status(404).json({ error }));
 };
@@ -68,48 +68,46 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, _) => {
   switch (req.body.like) {
     case 0:  
-    //cas: req.body.like = 0
       Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
-          if (sauce.usersLiked.find( user => user === req.body.userId)) {  // on cherche si l'utilisateur est déjà dans le tableau usersLiked
+          if (sauce.usersLiked.find( user => user === req.body.userId)) { // cherche si l'utilisateur est déjà dans le tableau usersLiked
             console.log(sauce.usersLiked)
 
-            Sauce.updateOne({ _id: req.params.id }, {         // si oui, on va mettre à jour la sauce avec le _id présent dans la requête
-              $inc: { likes: -1 },                            // on décrémente la valeur des likes de 1 (soit -1)
-              $pull: { usersLiked: req.body.userId }          // on retire l'utilisateur du tableau.
+            Sauce.updateOne({ _id: req.params.id }, { // si oui, met à jour la sauce avec le _id présent dans la requête
+              $inc: { likes: -1 }, // décrémente la valeur des likes de 1 (soit -1)
+              $pull: { usersLiked: req.body.userId } // retire l'utilisateur du tableau.
             })
-              .then(() => { res.status(201).json({ message: "vote enregistré."}); }) //code 201: created
+              .then(() => { res.status(201).json({ message: "vote enregistré"}); })
               .catch((error) => { res.status(400).json({error}); });
-
           } 
-          if (sauce.usersDisliked.find(user => user === req.body.userId)) {  //mêmes principes que précédemment avec le tableau usersDisliked
+          if (sauce.usersDisliked.find(user => user === req.body.userId)) { //idem mais pour usersDisliked
             Sauce.updateOne({ _id: req.params.id }, {
               $inc: { dislikes: -1 },
               $pull: { usersDisliked: req.body.userId }
             })
-              .then(() => { res.status(201).json({ message: "vote enregistré." }); })
+              .then(() => { res.status(201).json({ message: "vote enregistré" }); })
               .catch((error) => { res.status(400).json({error}); });
           }
         })
         .catch((error) => { res.status(404).json({error}); });
       break;
     
-    case 1:                                                 //cas: req.body.like = 1
-      Sauce.updateOne({ _id: req.params.id }, {             // on recherche la sauce avec le _id présent dans la requête
-        $inc: { likes: 1 },                                 // incrémentaton de la valeur de likes par 1.
-        $push: { usersLiked: req.body.userId }              // on ajoute l'utilisateur dans le array usersLiked.
+    case 1:                                                 
+      Sauce.updateOne({ _id: req.params.id }, { // recherche la sauce avec le _id présent dans la requête
+        $inc: { likes: 1 }, // incrémente de la valeur de likes par 1.
+        $push: { usersLiked: req.body.userId } // ajoute l'utilisateur dans le array usersLiked.
       })
-        .then(() => { res.status(201).json({ message: "vote enregistré." }); }) //code 201: created
-        .catch((error) => { res.status(400).json({ error }); }); //code 400: bad request
+        .then(() => { res.status(201).json({ message: "vote enregistré" }); })
+        .catch((error) => { res.status(400).json({ error }); });
       break;
     
-    case -1:                                                  //cas: req.body.like = 1
-      Sauce.updateOne({ _id: req.params.id }, {               // on recherche la sauce avec le _id présent dans la requête
-        $inc: { dislikes: 1 },                                // on décremente de 1 la valeur de dislikes.
-        $push: { usersDisliked: req.body.userId }             // on rajoute l'utilisateur à l'array usersDiliked.
+    case -1:                                                  
+      Sauce.updateOne({ _id: req.params.id }, { // recherche la sauce avec le _id présent dans la requête
+        $inc: { dislikes: 1 }, // décremente de 1 la valeur de dislikes.
+        $push: { usersDisliked: req.body.userId } // rajoute l'utilisateur à l'array usersDiliked.
       })
-        .then(() => { res.status(201).json({ message: "vote enregistré." }); }) // code 201: created
-        .catch((error) => { res.status(400).json({ error }); }); // code 400: bad request
+        .then(() => { res.status(201).json({ message: "vote enregistré" }); })
+        .catch((error) => { res.status(400).json({ error }); });
       break;
     default:
       console.error("bad request");

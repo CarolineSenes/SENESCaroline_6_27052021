@@ -3,8 +3,6 @@
 //importe package email-validator
 const emailValidation = require("email-validator");
 
-emailValidation.validate("test@email.com"); // true
-
 //exporte le middleware
 module.exports = (req, res, next) => {
     

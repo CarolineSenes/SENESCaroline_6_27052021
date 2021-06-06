@@ -1,5 +1,5 @@
 ////////// contient schéma du mot de passe utilisateur //////////
-////////// entre 8 et 100 caractères, minuscules ET majuscule, au moins 2 chiffres, pas d'espace //////////
+////////// entre 8 et 100 caractères, minuscule ET majuscule, au moins 2 chiffres, pas d'espace //////////
 
 //importe package password-validator
 const passwordValidator = require('password-validator');

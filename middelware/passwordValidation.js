@@ -1,6 +1,7 @@
 ////////// vérifie le format du mot de passe correspond au schema //////////
-const passwordSchema = require("../models/Password");
 
+
+const passwordSchema = require("../models/Password");
 
 //exporte le middleware
 module.exports = (req, res, next) => {
