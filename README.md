@@ -14,6 +14,10 @@ Une application d'avis gastronomique.
 - Seul l'utilisateur ayant créer la sauce peut modifier ou supprimer la sauce
 - L'utilisateur peut voter à sa guise pour les sauces de son choix
 
+## Sécurité
+
+L'API doit respecter le RGPD et les standards OWASP.
+
   
 ## Screenshots
 
